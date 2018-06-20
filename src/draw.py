@@ -5,17 +5,28 @@ from bokeh.plotting import figure
 from bokeh.models import GraphRenderer, StaticLayoutProvider, Oval
 from bokeh.palettes import Spectral8
 
-N = 8
+from graph import *
+
+graph_data = Graph()
+graph_data.debug_create_test_data()
+print(graph_data.vertexes)
+
+N = 9
 node_indices = list(range(N))
 
-plot = figure(title='Graph Layout Demonstration', x_range=(-1.1,1.1), y_range=(-1.1,1.1),
+debug_pallette = Spectral8
+debug_pallette.append('#ff0000')
+debug_pallette.append('#0000ff')
+
+plot = figure(title='Graph Layout Demonstration', x_range=(0, 500), y_range=(0, 500),
               tools='', toolbar_location=None)
 
 graph = GraphRenderer()
 
 graph.node_renderer.data_source.add(node_indices, 'index')
-graph.node_renderer.data_source.add(Spectral8, 'color')
-graph.node_renderer.glyph = Oval(height=0.1, width=0.2, fill_color='color')
+# graph.node_renderer.data_source.add(Spectral8, 'color')
+graph.node_renderer.data_source.add(debug_pallette, 'color')
+graph.node_renderer.glyph = Oval(height=10, width=20, fill_color='color')
 
 graph.edge_renderer.data_source.data = dict(
     start=[0]*N,
@@ -23,7 +34,7 @@ graph.edge_renderer.data_source.data = dict(
 
 ### start of layout code
 # Looks like this is setting the position of the vertecies
-circ = [i*2*math.pi/8 for i in node_indices]
+circ = [i*2*math.pi/N for i in node_indices]
 x = [math.cos(i) for i in circ]
 y = [math.sin(i) for i in circ]
 
